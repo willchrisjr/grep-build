@@ -12,29 +12,14 @@ def match_pattern(input_line, pattern):
     Returns:
     bool: True if the pattern is found in the input line, False otherwise.
     """
-    if pattern == r"\d":
-        # Check if any character in the input line is a digit
-        return any(char.isdigit() for char in input_line)
-    elif pattern == r"\w":
-        # Check if any character in the input line is alphanumeric or an underscore
-        return any(char.isalnum() or char == '_' for char in input_line)
-    elif len(pattern) == 1:
-        # Check if the single character pattern is in the input line
-        return pattern in input_line
-    elif pattern.startswith('[') and pattern.endswith(']'):
-        if pattern[1] == '^':
-            # Negative character group: extract the characters within the square brackets after the caret
-            char_group = pattern[2:-1]
-            # Check if any character in the input line is not in the character group
-            return any(char not in char_group for char in input_line)
-        else:
-            # Positive character group: extract the characters within the square brackets
-            char_group = pattern[1:-1]
-            # Check if any character in the input line is in the character group
-            return any(char in char_group for char in input_line)
-    else:
-        # Raise an error for unhandled patterns
-        raise RuntimeError(f"Unhandled pattern: {pattern}")
+    # Compile the pattern into a regular expression object
+    regex = re.compile(pattern)
+    
+    # Search for the pattern in the input line
+    match = regex.search(input_line)
+    
+    # Return True if a match is found, False otherwise
+    return match is not None
 
 def main():
     """
